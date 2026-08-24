@@ -13,7 +13,14 @@ interface TranslationProviderProps {
 }
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
-  const [isReady, setIsReady] = useState(i18nInstance.isInitialized);
+  // Not seeded from i18nInstance.isInitialized: that flag flips true as soon as
+  // i18next's core init resolves, which happens *before* the chained
+  // loadNamespaces(NAMESPACES) call in initPromise finishes fetching every
+  // namespace. Starting from it let children render while some namespaces were
+  // still loading, surfacing raw keys (e.g. "project_cycles.status.yet_to_start")
+  // that never got a chance to re-render once the namespace arrived, since
+  // useTranslation() here doesn't bind those fallback namespaces directly.
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     initPromise
