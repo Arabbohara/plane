@@ -27,8 +27,8 @@ import "@fontsource/material-symbols-rounded";
 // eslint-disable-next-line import/no-unassigned-import -- side-effect font-face import
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "Plane Publish | Make your Plane boards public with one-click";
-const APP_DESCRIPTION = "Plane Publish is a customer feedback management tool built on top of plane.so";
+const APP_TITLE = "System Management Publish | Share boards and roadmaps with one click";
+const APP_DESCRIPTION = "Publish and share System Management boards and roadmaps.";
 
 export const links: Route.LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },
