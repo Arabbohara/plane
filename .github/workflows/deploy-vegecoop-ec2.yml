@@ -1,0 +1,55 @@
+name: Deploy vegecoop to EC2
+
+on:
+  push:
+    branches:
+      - vegecoop-main
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          timeout: 30s
+          command_timeout: 30m
+          script: |
+            set -e
+            cd /home/ec2-user/plane
+
+            echo "== Backing up database =="
+            mkdir -p /home/ec2-user/backups
+            docker exec plane-db sh -c 'pg_dump -U plane -d plane -Fc -f /tmp/backup.pgdump'
+            docker cp plane-db:/tmp/backup.pgdump "/home/ec2-user/backups/backup-$(date +%Y%m%d-%H%M%S).pgdump"
+            docker exec plane-db rm /tmp/backup.pgdump
+            # keep the last 14 backups only
+            ls -1t /home/ec2-user/backups/*.pgdump 2>/dev/null | tail -n +15 | xargs -r rm --
+
+            echo "== Pulling latest vegecoop-main =="
+            git fetch origin vegecoop-main
+            git reset --hard origin/vegecoop-main
+
+            echo "== Rebuilding and restarting =="
+            docker compose -f docker-compose.yml up -d --build
+
+            echo "== Waiting for services to settle =="
+            sleep 20
+
+      - name: Health check
+        run: |
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "http://${{ secrets.EC2_HOST }}/api/instances/")
+            if [ "$code" = "200" ]; then
+              echo "Health check passed (HTTP $code)"
+              exit 0
+            fi
+            echo "Attempt $i: got HTTP $code, retrying in 10s..."
+            sleep 10
+          done
+          echo "Health check FAILED after 6 attempts — the deploy may have broken the live app."
+          exit 1
