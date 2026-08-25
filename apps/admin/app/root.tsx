@@ -24,7 +24,7 @@ import "@fontsource/material-symbols-rounded";
 // eslint-disable-next-line import/no-unassigned-import -- side-effect font-face import
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "System Management";
+const APP_TITLE = "Vegecoop Project Management System";
 const APP_DESCRIPTION = "Manage work items, cycles, and product roadmaps in one place.";
 
 export const links: LinksFunction = () => [

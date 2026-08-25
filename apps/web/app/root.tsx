@@ -38,7 +38,7 @@ import "@fontsource/material-symbols-rounded";
 // eslint-disable-next-line import/no-unassigned-import -- side-effect font-face import
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "System Management";
+const APP_TITLE = "Vegecoop Project Management System";
 
 export const links: LinksFunction = () => [
   { rel: "icon", type: "image/png", sizes: "32x32", href: favicon32 },
@@ -69,7 +69,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#fff" />
         {/* Meta info for PWA */}
-        <meta name="application-name" content="System Management" />
+        <meta name="application-name" content="Vegecoop Project Management System" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
@@ -110,7 +110,7 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:image", content: ogImage },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },
-  { property: "og:image:alt", content: "System Management - Project management" },
+  { property: "og:image:alt", content: "Vegecoop Project Management System - Project management" },
   {
     name: "keywords",
     content: "project management, work items tracking, agile, scrum, kanban, collaboration, roadmaps, cycles",
@@ -119,7 +119,7 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:image", content: ogImage },
   { name: "twitter:image:width", content: "1200" },
   { name: "twitter:image:height", content: "630" },
-  { name: "twitter:image:alt", content: "System Management - Project management" },
+  { name: "twitter:image:alt", content: "Vegecoop Project Management System - Project management" },
 ];
 
 export default function Root() {

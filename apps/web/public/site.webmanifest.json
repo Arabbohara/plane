@@ -1,6 +1,6 @@
 {
-  "name": "System Management",
-  "short_name": "System Management",
+  "name": "Vegecoop Project Management System",
+  "short_name": "Vegecoop Project Management System",
   "description": "Manage work items, cycles, and product roadmaps in one place.",
   "start_url": ".",
   "display": "standalone",

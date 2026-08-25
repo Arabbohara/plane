@@ -16,7 +16,7 @@ export function PageHead(props: PageHeadTitleProps) {
 
   useEffect(() => {
     if (title) {
-      document.title = title ?? "System Management";
+      document.title = title ?? "Vegecoop Project Management System";
     }
   }, [title]);
 

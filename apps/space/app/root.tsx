@@ -27,8 +27,8 @@ import "@fontsource/material-symbols-rounded";
 // eslint-disable-next-line import/no-unassigned-import -- side-effect font-face import
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "System Management Publish | Share boards and roadmaps with one click";
-const APP_DESCRIPTION = "Publish and share System Management boards and roadmaps.";
+const APP_TITLE = "Vegecoop Project Management System Publish | Share boards and roadmaps with one click";
+const APP_DESCRIPTION = "Publish and share Vegecoop Project Management System boards and roadmaps.";
 
 export const links: Route.LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },
