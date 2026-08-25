@@ -49,6 +49,7 @@ export enum EAuthenticationErrorCodes {
   // Password strength
   INVALID_PASSWORD = "5020",
   PASSWORD_TOO_WEAK = "5021",
+  SIGNUP_DOMAIN_RESTRICTED = "5022",
   SMTP_NOT_CONFIGURED = "5025",
   // Sign Up
   USER_ALREADY_EXIST = "5030",
@@ -129,6 +130,10 @@ const errorCodeMessages: {
   [EAuthenticationErrorCodes.SIGNUP_DISABLED]: {
     title: `Sign up disabled`,
     message: () => `Sign up disabled. Please contact your administrator.`,
+  },
+  [EAuthenticationErrorCodes.SIGNUP_DOMAIN_RESTRICTED]: {
+    title: `Sign up not allowed`,
+    message: () => `This instance is only available to Vegecoop accounts. Please use your @vegecoop.co.jp email.`,
   },
   [EAuthenticationErrorCodes.MAGIC_LINK_LOGIN_DISABLED]: {
     title: `Magic link login disabled`,
@@ -383,6 +388,7 @@ export const authErrorHandler = (errorCode: EAuthenticationErrorCodes, email?: s
     EAuthenticationErrorCodes.INVALID_EMAIL,
     EAuthenticationErrorCodes.EMAIL_REQUIRED,
     EAuthenticationErrorCodes.SIGNUP_DISABLED,
+    EAuthenticationErrorCodes.SIGNUP_DOMAIN_RESTRICTED,
     EAuthenticationErrorCodes.MAGIC_LINK_LOGIN_DISABLED,
     EAuthenticationErrorCodes.PASSWORD_LOGIN_DISABLED,
     EAuthenticationErrorCodes.BOT_USER_LOGIN_FORBIDDEN,

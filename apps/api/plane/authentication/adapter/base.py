@@ -102,6 +102,18 @@ class Adapter:
     def __check_signup(self, email):
         """Check if sign up is enabled or not and raise exception if not enabled"""
 
+        # Restrict account creation to a specific email domain, regardless of
+        # ENABLE_SIGNUP or workspace invites — this instance is private to
+        # that organization and must never provision accounts for anyone else.
+        restricted_domain = os.environ.get("RESTRICT_SIGNUP_DOMAIN", "vegecoop.co.jp").strip().lower()
+        if restricted_domain and not email.endswith(f"@{restricted_domain}"):
+            self.logger.warning("Sign up rejected: email domain is outside the allowed organization")
+            raise AuthenticationException(
+                error_code=AUTHENTICATION_ERROR_CODES["SIGNUP_DOMAIN_RESTRICTED"],
+                error_message="SIGNUP_DOMAIN_RESTRICTED",
+                payload={"email": email},
+            )
+
         # Get configuration value
         (ENABLE_SIGNUP,) = get_configuration_value([
             {"key": "ENABLE_SIGNUP", "default": os.environ.get("ENABLE_SIGNUP", "1")}

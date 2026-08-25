@@ -33,6 +33,7 @@ export enum EAuthenticationErrorCodes {
   SIGNUP_DISABLED = "5015",
   // Password strength
   INVALID_PASSWORD = "5020",
+  SIGNUP_DOMAIN_RESTRICTED = "5022",
   SMTP_NOT_CONFIGURED = "5025",
   // Sign Up
   USER_ALREADY_EXIST = "5030",
@@ -99,6 +100,10 @@ const errorCodeMessages: {
   [EAuthenticationErrorCodes.INSTANCE_NOT_CONFIGURED]: {
     title: `Instance not configured`,
     message: () => `Instance not configured. Please contact your administrator.`,
+  },
+  [EAuthenticationErrorCodes.SIGNUP_DOMAIN_RESTRICTED]: {
+    title: `Sign up not allowed`,
+    message: () => `This instance is only available to Vegecoop accounts. Please use your @vegecoop.co.jp email.`,
   },
   [EAuthenticationErrorCodes.SIGNUP_DISABLED]: {
     title: `Sign up disabled`,
@@ -349,6 +354,7 @@ export const authErrorHandler = (errorCode: EAuthenticationErrorCodes, email?: s
     EAuthenticationErrorCodes.INVALID_EMAIL,
     EAuthenticationErrorCodes.EMAIL_REQUIRED,
     EAuthenticationErrorCodes.SIGNUP_DISABLED,
+    EAuthenticationErrorCodes.SIGNUP_DOMAIN_RESTRICTED,
     EAuthenticationErrorCodes.INVALID_PASSWORD,
     EAuthenticationErrorCodes.SMTP_NOT_CONFIGURED,
     EAuthenticationErrorCodes.USER_ALREADY_EXIST,
