@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "部門別プロジェクト数",
+    "total_projects": "{count, plural, one {#件のプロジェクト} other {#件のプロジェクト}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "作成日時",

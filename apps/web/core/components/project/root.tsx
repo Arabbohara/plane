@@ -20,6 +20,7 @@ import { useWorkspace } from "@/hooks/store/use-workspace";
 // local imports
 import { ProjectAppliedFiltersList } from "./applied-filters";
 import { ProjectCardList } from "./card-list";
+import { ProjectDepartmentSummary } from "./department-summary";
 
 export const ProjectRoot = observer(function ProjectRoot() {
   const { currentWorkspace } = useWorkspace();
@@ -72,11 +73,11 @@ export const ProjectRoot = observer(function ProjectRoot() {
     clearAllFilters(workspaceSlug.toString());
     clearAllAppliedDisplayFilters(workspaceSlug.toString());
     if (isArchived) updateDisplayFilters(workspaceSlug.toString(), { archived_projects: true });
-  }, [clearAllFilters, clearAllAppliedDisplayFilters, workspaceSlug]);
+  }, [clearAllFilters, clearAllAppliedDisplayFilters, updateDisplayFilters, isArchived, workspaceSlug]);
 
   useEffect(() => {
     updateDisplayFilters(workspaceSlug.toString(), { archived_projects: isArchived });
-  }, [pathname]);
+  }, [pathname, workspaceSlug, updateDisplayFilters, isArchived]);
 
   return (
     <>
@@ -94,6 +95,7 @@ export const ProjectRoot = observer(function ProjectRoot() {
             alwaysAllowEditing
           />
         )}
+        {!isArchived && <ProjectDepartmentSummary />}
         <ProjectCardList />
       </div>
     </>
