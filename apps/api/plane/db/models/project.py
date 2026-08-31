@@ -118,6 +118,13 @@ class Project(BaseModel):
     # external_id for imports
     external_source = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, blank=True, null=True)
+    department = models.ForeignKey(
+        "db.Department",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="department_projects",
+    )
 
     def __init__(self, *args, **kwargs):
         # Track if timezone is provided, if so, don't override it with the workspace timezone when saving

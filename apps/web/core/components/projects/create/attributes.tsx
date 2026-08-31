@@ -13,7 +13,10 @@ import { CustomSelect } from "@plane/ui";
 import { getTabIndex } from "@plane/utils";
 // components
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
+import { DepartmentSelect } from "@/components/project/department-select";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";
+// hooks
+import { useProject } from "@/hooks/store/use-project";
 
 type Props = {
   isMobile?: boolean;
@@ -22,10 +25,31 @@ type Props = {
 function ProjectAttributes(props: Props) {
   const { isMobile = false } = props;
   const { t } = useTranslation();
-  const { control } = useFormContext<IProject>();
+  const { control, setValue } = useFormContext<IProject>();
+  const { totalProjectIds, getPartialProjectById } = useProject();
   const { getIndex } = getTabIndex(ETabIndices.PROJECT_CREATE, isMobile);
+
+  const handleDepartmentChange = (departmentId: string | null, prefix?: string) => {
+    setValue("department", departmentId);
+    if (prefix) {
+      const existingCount = (totalProjectIds ?? []).filter(
+        (projectId) => getPartialProjectById(projectId)?.department === departmentId
+      ).length;
+      setValue("identifier", `${prefix}${existingCount + 1}`, { shouldValidate: true });
+    }
+  };
+
   return (
     <div className="flex flex-wrap items-center gap-2">
+      <div className="h-7 flex-shrink-0" tabIndex={getIndex("department")}>
+        <Controller
+          name="department"
+          control={control}
+          render={({ field: { value } }) => (
+            <DepartmentSelect value={value} onChange={handleDepartmentChange} buttonClassName="h-full" />
+          )}
+        />
+      </div>
       <Controller
         name="network"
         control={control}

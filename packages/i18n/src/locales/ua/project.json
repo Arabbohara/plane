@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Проєкти за відділами",
+    "total_projects": "{count, plural, one {# проєкт} few {# проєкта} many {# проєктів} other {# проєкта}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Створено",

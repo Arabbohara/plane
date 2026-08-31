@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "依部門劃分的專案",
+    "total_projects": "{count, plural, one {# 個專案} other {# 個專案}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "建立時間",

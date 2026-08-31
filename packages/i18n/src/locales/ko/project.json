@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "부서별 프로젝트",
+    "total_projects": "{count, plural, one {#개 프로젝트} other {#개 프로젝트}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "생성일",

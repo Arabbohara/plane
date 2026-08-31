@@ -10,6 +10,15 @@ import type { TStateGroups } from "../state";
 import type { IUser, IUserLite } from "../users";
 import type { IWorkspace } from "../workspace";
 
+export interface TDepartment {
+  id: string;
+  name: string;
+  prefix?: string;
+  color?: string;
+  sort_order?: number;
+  workspace_id?: string;
+}
+
 export enum EUserProjectRoles {
   ADMIN = 20,
   MEMBER = 15,
@@ -33,6 +42,7 @@ export interface IPartialProject {
   guest_view_all_features?: boolean;
   project_lead?: IUserLite | string | null;
   network?: number;
+  department?: string | null;
   // Timestamps
   created_at?: Date;
   updated_at?: Date;

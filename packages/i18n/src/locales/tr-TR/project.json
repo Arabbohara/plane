@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Departmana göre projeler",
+    "total_projects": "{count, plural, one {# proje} other {# proje}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Oluşturulma tarihi",

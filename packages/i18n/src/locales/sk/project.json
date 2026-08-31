@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Projekty podľa oddelenia",
+    "total_projects": "{count, plural, one {# projekt} few {# projekty} many {# projektu} other {# projektov}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Vytvorené dňa",

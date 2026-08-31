@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
@@ -19,13 +19,14 @@ import { IconButton } from "@plane/propel/icon-button";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import { Tooltip } from "@plane/propel/tooltip";
 import { Loader } from "@plane/ui";
-import { copyUrlToClipboard, cn, orderJoinedProjects } from "@plane/utils";
+import { copyUrlToClipboard, cn, hexToRgb, orderJoinedProjects } from "@plane/utils";
 // components
 import { CreateProjectModal } from "@/components/project/create-project-modal";
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
+import { useDepartment } from "@/hooks/store/use-department";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useProjectNavigationPreferences } from "@/hooks/use-navigation-preferences";
@@ -38,6 +39,7 @@ export const SidebarProjectsList = observer(function SidebarProjectsList() {
   // states
   const [isAllProjectsListOpen, setIsAllProjectsListOpen] = useState(true);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [collapsedDepartments, setCollapsedDepartments] = useState<Set<string>>(new Set());
   const [isScrolled, setIsScrolled] = useState(false); // scroll animation state
   // refs
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -47,6 +49,7 @@ export const SidebarProjectsList = observer(function SidebarProjectsList() {
   const { allowPermissions } = useUserPermissions();
   const { preferences: projectPreferences } = useProjectNavigationPreferences();
   const { isExtendedProjectSidebarOpened, toggleExtendedProjectSidebar } = useAppTheme();
+  const { getDepartmentById, fetchDepartments } = useDepartment();
 
   const { loader, getPartialProjectById, joinedProjectIds: joinedProjects, updateProjectView } = useProject();
   // router params
@@ -68,13 +71,47 @@ export const SidebarProjectsList = observer(function SidebarProjectsList() {
   const hasMoreProjects =
     projectPreferences.showLimitedProjects && joinedProjects.length > projectPreferences.limitedProjectsCount;
 
-  const handleCopyText = (projectId: string) => {
-    copyUrlToClipboard(`${workspaceSlug}/projects/${projectId}/issues`).then(() => {
-      setToast({
-        type: TOAST_TYPE.SUCCESS,
-        title: t("link_copied"),
-        message: t("project_link_copied_to_clipboard"),
-      });
+  // Group displayed projects by department, preserving their existing order
+  const departmentGroups = useMemo(() => {
+    const groups = new Map<string, string[]>();
+    displayedProjects.forEach((projectId) => {
+      const department = getPartialProjectById(projectId)?.department?.trim() ?? "";
+      const existing = groups.get(department);
+      if (existing) existing.push(projectId);
+      else groups.set(department, [projectId]);
+    });
+    return Array.from(groups.entries()).map(([department, projectIds]) => ({ department, projectIds }));
+  }, [displayedProjects, getPartialProjectById]);
+
+  const projectIndexById = useMemo(() => {
+    const map = new Map<string, number>();
+    displayedProjects.forEach((projectId, index) => map.set(projectId, index));
+    return map;
+  }, [displayedProjects]);
+
+  // Only worth grouping when projects actually span more than one department
+  const shouldGroupByDepartment = departmentGroups.length > 1;
+
+  useEffect(() => {
+    if (workspaceSlug) fetchDepartments(workspaceSlug.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceSlug]);
+
+  const toggleDepartment = (department: string) => {
+    setCollapsedDepartments((prev) => {
+      const next = new Set(prev);
+      if (next.has(department)) next.delete(department);
+      else next.add(department);
+      return next;
+    });
+  };
+
+  const handleCopyText = async (projectId: string) => {
+    await copyUrlToClipboard(`${workspaceSlug}/projects/${projectId}/issues`);
+    setToast({
+      type: TOAST_TYPE.SUCCESS,
+      title: t("link_copied"),
+      message: t("project_link_copied_to_clipboard"),
     });
   };
 
@@ -230,6 +267,7 @@ export const SidebarProjectsList = observer(function SidebarProjectsList() {
               {loader === "init-loader" && (
                 <Loader className="w-full space-y-1.5">
                   {Array.from({ length: 4 }).map((_, index) => (
+                    // oxlint-disable-next-line react/no-array-index-key
                     <Loader.Item key={index} height="28px" />
                   ))}
                 </Loader>
@@ -237,18 +275,77 @@ export const SidebarProjectsList = observer(function SidebarProjectsList() {
               {isAllProjectsListOpen && (
                 <Disclosure.Panel as="div" className="flex flex-col gap-0.5" static>
                   <>
-                    {displayedProjects.map((projectId, index) => (
-                      <SidebarProjectsListItem
-                        key={projectId}
-                        projectId={projectId}
-                        handleCopyText={() => handleCopyText(projectId)}
-                        projectListType={"JOINED"}
-                        disableDrag={false}
-                        disableDrop={false}
-                        isLastChild={index === displayedProjects.length - 1}
-                        handleOnProjectDrop={handleOnProjectDrop}
-                      />
-                    ))}
+                    {shouldGroupByDepartment
+                      ? departmentGroups.map(({ department, projectIds }) => {
+                          const isCollapsed = collapsedDepartments.has(department);
+                          const departmentColor = department ? getDepartmentById(department)?.color : undefined;
+                          const departmentRgb = departmentColor ? hexToRgb(departmentColor) : undefined;
+                          return (
+                            <div
+                              key={department || "__no_department__"}
+                              className="flex flex-col gap-0.5 rounded-md py-0.5"
+                              style={
+                                departmentRgb
+                                  ? {
+                                      backgroundColor: `rgba(${departmentRgb.r}, ${departmentRgb.g}, ${departmentRgb.b}, 0.07)`,
+                                    }
+                                  : undefined
+                              }
+                            >
+                              <button
+                                type="button"
+                                onClick={() => toggleDepartment(department)}
+                                className="flex w-full items-center gap-1 rounded-sm px-2 py-1 text-left text-tertiary hover:bg-layer-transparent-hover"
+                              >
+                                <ChevronRightIcon
+                                  className={cn("h-3 w-3 flex-shrink-0 transition-transform", {
+                                    "rotate-90": !isCollapsed,
+                                  })}
+                                />
+                                {departmentColor && (
+                                  <span
+                                    className="h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                                    style={{ backgroundColor: departmentColor }}
+                                  />
+                                )}
+                                <span className="truncate text-12 font-medium">
+                                  {department
+                                    ? (getDepartmentById(department)?.name ?? department)
+                                    : t("no_department")}
+                                </span>
+                                <span className="ml-auto text-11 text-placeholder">{projectIds.length}</span>
+                              </button>
+                              {!isCollapsed && (
+                                <div className="flex flex-col gap-0.5 pl-2">
+                                  {projectIds.map((projectId) => (
+                                    <SidebarProjectsListItem
+                                      key={projectId}
+                                      projectId={projectId}
+                                      handleCopyText={() => handleCopyText(projectId)}
+                                      projectListType={"JOINED"}
+                                      disableDrag={false}
+                                      disableDrop={false}
+                                      isLastChild={projectIndexById.get(projectId) === displayedProjects.length - 1}
+                                      handleOnProjectDrop={handleOnProjectDrop}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })
+                      : displayedProjects.map((projectId, index) => (
+                          <SidebarProjectsListItem
+                            key={projectId}
+                            projectId={projectId}
+                            handleCopyText={() => handleCopyText(projectId)}
+                            projectListType={"JOINED"}
+                            disableDrag={false}
+                            disableDrop={false}
+                            isLastChild={index === displayedProjects.length - 1}
+                            handleOnProjectDrop={handleOnProjectDrop}
+                          />
+                        ))}
                     {hasMoreProjects && (
                       <SidebarNavItem>
                         <button

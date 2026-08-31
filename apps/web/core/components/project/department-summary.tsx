@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -14,19 +14,12 @@ import { useTranslation } from "@plane/i18n";
 import { Logo } from "@plane/propel/emoji-icon-picker";
 import type { TProject } from "@plane/types";
 // hooks
+import { useDepartment } from "@/hooks/store/use-department";
 import { useProject } from "@/hooks/store/use-project";
 
-// Projects are named "<department>（<detail>）" by convention (e.g. "葛西（丸五）").
-// Everything before the full-width opening paren is the department; projects
-// without that separator are their own single-project department.
-function getProjectDepartment(name: string): string {
-  const separatorIndex = name.indexOf("（");
-  if (separatorIndex === -1) return name.trim();
-  return name.slice(0, separatorIndex).trim() || name.trim();
-}
-
 type TDepartmentGroup = {
-  department: string;
+  departmentId: string;
+  departmentName: string;
   projects: TProject[];
 };
 
@@ -34,34 +27,44 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
   const { workspaceSlug } = useParams();
   const { t } = useTranslation();
   const { filteredProjectIds, getProjectById } = useProject();
+  const { getDepartmentById, fetchDepartments } = useDepartment();
   const [collapsedDepartments, setCollapsedDepartments] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (workspaceSlug) fetchDepartments(workspaceSlug.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceSlug]);
 
   const departmentGroups: TDepartmentGroup[] = useMemo(() => {
     const groups = new Map<string, TProject[]>();
     (filteredProjectIds ?? []).forEach((projectId) => {
       const project = getProjectById(projectId);
       if (!project) return;
-      const department = getProjectDepartment(project.name);
-      const existing = groups.get(department);
+      const departmentId = project.department ?? "";
+      const existing = groups.get(departmentId);
       if (existing) existing.push(project);
-      else groups.set(department, [project]);
+      else groups.set(departmentId, [project]);
     });
 
     return Array.from(groups.entries())
-      .map(([department, projects]) => ({ department, projects }))
-      .toSorted((a, b) => b.projects.length - a.projects.length || a.department.localeCompare(b.department, "ja"));
-  }, [filteredProjectIds, getProjectById]);
+      .map(([departmentId, projects]) => ({
+        departmentId,
+        departmentName: departmentId ? (getDepartmentById(departmentId)?.name ?? departmentId) : t("no_department"),
+        projects,
+      }))
+      .sort((a, b) => b.projects.length - a.projects.length || a.departmentName.localeCompare(b.departmentName, "ja"));
+  }, [filteredProjectIds, getProjectById, getDepartmentById, t]);
 
-  const toggleDepartment = (department: string) => {
+  const toggleDepartment = (departmentId: string) => {
     setCollapsedDepartments((prev) => {
       const next = new Set(prev);
-      if (next.has(department)) next.delete(department);
-      else next.add(department);
+      if (next.has(departmentId)) next.delete(departmentId);
+      else next.add(departmentId);
       return next;
     });
   };
 
-  if (departmentGroups.length === 0) return null;
+  if (departmentGroups.length <= 1) return null;
 
   const totalProjects = filteredProjectIds?.length ?? 0;
 
@@ -75,13 +78,13 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
           </span>
         </div>
         <div className="divide-y divide-subtle">
-          {departmentGroups.map(({ department, projects }) => {
-            const isCollapsed = collapsedDepartments.has(department);
+          {departmentGroups.map(({ departmentId, departmentName, projects }) => {
+            const isCollapsed = collapsedDepartments.has(departmentId);
             return (
-              <div key={department}>
+              <div key={departmentId || "__no_department__"}>
                 <button
                   type="button"
-                  onClick={() => toggleDepartment(department)}
+                  onClick={() => toggleDepartment(departmentId)}
                   className="flex w-full items-center justify-between gap-2 px-4 py-2.5 text-left hover:bg-surface-1"
                 >
                   <span className="flex items-center gap-2">
@@ -90,7 +93,7 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
                     ) : (
                       <ChevronDownIcon className="h-3.5 w-3.5 flex-shrink-0 text-tertiary" />
                     )}
-                    <span className="text-13 font-medium text-primary">{department}</span>
+                    <span className="text-13 font-medium text-primary">{departmentName}</span>
                   </span>
                   <span className="rounded-full bg-surface-2 px-2 py-0.5 text-12 text-secondary">
                     {t("project_departments.total_projects", { count: projects.length })}

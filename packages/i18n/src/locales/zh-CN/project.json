@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "按部门划分的项目",
+    "total_projects": "{count, plural, one {# 个项目} other {# 个项目}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "创建时间",

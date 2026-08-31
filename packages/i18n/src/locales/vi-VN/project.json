@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Dự án theo phòng ban",
+    "total_projects": "{count, plural, one {# dự án} other {# dự án}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Thời gian tạo",

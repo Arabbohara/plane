@@ -182,6 +182,7 @@ class ProjectViewSet(BaseViewSet):
             "intake_count",
             "archived_at",
             "workspace",
+            "department",
             "cycle_view",
             "issue_views_view",
             "module_view",

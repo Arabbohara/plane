@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Proyek berdasarkan departemen",
+    "total_projects": "{count, plural, one {# proyek} other {# proyek}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Dibuat pada",

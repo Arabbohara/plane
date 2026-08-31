@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Projekty według działu",
+    "total_projects": "{count, plural, one {# projekt} few {# projekty} many {# projektów} other {# projektu}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Utworzono dnia",

@@ -1,4 +1,8 @@
 {
+  "project_departments": {
+    "title": "Proiecte pe departament",
+    "total_projects": "{count, plural, one {# proiect} few {# proiecte} other {# de proiecte}}"
+  },
   "project_view": {
     "sort_by": {
       "created_at": "Creat la",
