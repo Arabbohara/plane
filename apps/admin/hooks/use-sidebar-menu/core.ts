@@ -19,47 +19,48 @@ export type TCoreSidebarMenuKey =
   | "image"
   | "team-activity";
 
+// name/description hold translation keys, resolved by useSidebarMenu().
 export const coreSidebarMenuLinks: Record<TCoreSidebarMenuKey, TSidebarMenuItem> = {
   general: {
     Icon: Cog,
-    name: "General",
-    description: "Identify your instances and get key details.",
+    name: "admin.sidebar.general.name",
+    description: "admin.sidebar.general.description",
     href: `/general/`,
   },
   "team-activity": {
     Icon: Users,
-    name: "Team activity",
-    description: "See who's on what project and their latest update, in one place.",
+    name: "admin.sidebar.team_activity.name",
+    description: "admin.sidebar.team_activity.description",
     href: `/team-activity/`,
   },
   email: {
     Icon: Mail,
-    name: "Email",
-    description: "Configure your SMTP controls.",
+    name: "admin.sidebar.email.name",
+    description: "admin.sidebar.email.description",
     href: `/email/`,
   },
   workspace: {
     Icon: WorkspaceIcon,
-    name: "Workspaces",
-    description: "Manage all workspaces on this instance.",
+    name: "admin.sidebar.workspaces.name",
+    description: "admin.sidebar.workspaces.description",
     href: `/workspace/`,
   },
   authentication: {
     Icon: LockIcon,
-    name: "Authentication",
-    description: "Configure authentication modes.",
+    name: "admin.sidebar.authentication.name",
+    description: "admin.sidebar.authentication.description",
     href: `/authentication/`,
   },
   ai: {
     Icon: BrainCog,
-    name: "Artificial intelligence",
-    description: "Configure your OpenAI creds.",
+    name: "admin.sidebar.ai.name",
+    description: "admin.sidebar.ai.description",
     href: `/ai/`,
   },
   image: {
     Icon: Image,
-    name: "Images in Plane",
-    description: "Allow third-party image libraries.",
+    name: "admin.sidebar.image.name",
+    description: "admin.sidebar.image.description",
     href: `/image/`,
   },
 };

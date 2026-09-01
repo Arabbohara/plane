@@ -4,11 +4,14 @@
  * See the LICENSE file for details.
  */
 
+import { useTranslation } from "@plane/i18n";
 // local imports
 import { coreSidebarMenuLinks } from "./core";
 import type { TSidebarMenuItem } from "./types";
 
 export function useSidebarMenu(): TSidebarMenuItem[] {
+  const { t } = useTranslation();
+
   return [
     coreSidebarMenuLinks.general,
     coreSidebarMenuLinks["team-activity"],
@@ -17,5 +20,10 @@ export function useSidebarMenu(): TSidebarMenuItem[] {
     coreSidebarMenuLinks.workspace,
     coreSidebarMenuLinks.ai,
     coreSidebarMenuLinks.image,
-  ];
+  ].map((item) => ({
+    Icon: item.Icon,
+    href: item.href,
+    name: t(item.name),
+    description: t(item.description),
+  }));
 }

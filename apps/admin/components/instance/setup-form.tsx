@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 // plane internal packages
 import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { AuthService } from "@plane/services";
 import { Checkbox, Input, PasswordStrengthIndicator, Spinner } from "@plane/ui";
@@ -58,6 +59,7 @@ const defaultFromData: TFormData = {
 };
 
 export function InstanceSetupForm() {
+  const { t } = useTranslation();
   // search params
   const searchParams = useSearchParams();
   const firstNameParam = searchParams?.get("first_name") || undefined;
@@ -141,10 +143,7 @@ export function InstanceSetupForm() {
       <AuthHeader />
       <div className="mt-10 flex w-full flex-grow flex-col items-center justify-center py-6">
         <div className="relative flex w-full max-w-[22.5rem] flex-col gap-6">
-          <FormHeader
-            heading="Setup your Plane Instance"
-            subHeading="Post setup you will be able to manage this Plane instance."
-          />
+          <FormHeader heading={t("admin.setup.heading")} subHeading={t("admin.setup.sub_heading")} />
           {errorData.type &&
             errorData?.message &&
             ![EErrorCodes.INVALID_EMAIL, EErrorCodes.INVALID_PASSWORD].includes(errorData.type) && (

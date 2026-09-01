@@ -9,6 +9,7 @@ import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
 // plane internal packages
+import { useTranslation } from "@plane/i18n";
 import { setPromiseToast, setToast, TOAST_TYPE } from "@plane/propel/toast";
 import type { TInstanceConfigurationKeys, TInstanceAuthenticationModes } from "@plane/types";
 import { Loader, ToggleSwitch } from "@plane/ui";
@@ -25,6 +26,7 @@ import { useInstance } from "@/hooks/store";
 import type { Route } from "./+types/page";
 
 const InstanceAuthenticationPage = observer(function InstanceAuthenticationPage(_props: Route.ComponentProps) {
+  const { t } = useTranslation();
   // theme
   const { resolvedTheme: resolvedThemeAdmin } = useTheme();
   const resolvedTheme = resolveGeneralTheme(resolvedThemeAdmin);
@@ -113,8 +115,8 @@ const InstanceAuthenticationPage = observer(function InstanceAuthenticationPage(
   return (
     <PageWrapper
       header={{
-        title: "Manage authentication modes for your instance",
-        description: "Configure authentication modes for your team and restrict sign-ups to be invite only.",
+        title: t("admin.screens.authentication.title"),
+        description: t("admin.screens.authentication.description"),
       }}
     >
       {formattedConfig ? (
@@ -171,6 +173,6 @@ const InstanceAuthenticationPage = observer(function InstanceAuthenticationPage(
   );
 });
 
-export const meta: Route.MetaFunction = () => [{ title: "Authentication Settings - Plane Web" }];
+export const meta: Route.MetaFunction = () => [{ title: "Authentication Settings - God Mode" }];
 
 export default InstanceAuthenticationPage;

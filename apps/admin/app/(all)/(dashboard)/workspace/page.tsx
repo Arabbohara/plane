@@ -10,6 +10,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { Loader as LoaderIcon } from "lucide-react";
 // types
+import { useTranslation } from "@plane/i18n";
 import { Button, getButtonStyling } from "@plane/propel/button";
 import { setPromiseToast } from "@plane/propel/toast";
 import type { TInstanceConfigurationKeys } from "@plane/types";
@@ -24,6 +25,7 @@ import { useInstance, useWorkspace } from "@/hooks/store";
 import type { Route } from "./+types/page";
 
 const WorkspaceManagementPage = observer(function WorkspaceManagementPage(_props: Route.ComponentProps) {
+  const { t } = useTranslation();
   // states
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   // store
@@ -67,6 +69,7 @@ const WorkspaceManagementPage = observer(function WorkspaceManagementPage(_props
     await updateConfigPromise
       .then(() => {
         setIsSubmitting(false);
+        return;
       })
       .catch((err) => {
         console.error(err);
@@ -77,8 +80,8 @@ const WorkspaceManagementPage = observer(function WorkspaceManagementPage(_props
   return (
     <PageWrapper
       header={{
-        title: "Workspaces on this instance",
-        description: "See all workspaces and control who can create them.",
+        title: t("admin.screens.workspace.title"),
+        description: t("admin.screens.workspace.description"),
       }}
     >
       <div className="space-y-3">

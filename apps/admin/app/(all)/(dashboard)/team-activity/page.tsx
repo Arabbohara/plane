@@ -7,6 +7,7 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { TeamActivityService } from "@plane/services";
 import { Avatar, Loader } from "@plane/ui";
 import { calculateTimeAgo, getFileURL } from "@plane/utils";
@@ -19,12 +20,13 @@ const teamActivityService = new TeamActivityService();
 
 const TeamActivityPage = observer(function TeamActivityPage(_props: Route.ComponentProps) {
   const { data: members, isLoading } = useSWR("INSTANCE_TEAM_ACTIVITY", () => teamActivityService.list());
+  const { t } = useTranslation();
 
   return (
     <PageWrapper
       header={{
-        title: "Team activity",
-        description: "See who's on what project, their progress, and their latest update — in one place.",
+        title: t("admin.screens.team_activity.title"),
+        description: t("admin.screens.team_activity.description"),
       }}
     >
       {isLoading ? (
@@ -51,7 +53,7 @@ const TeamActivityPage = observer(function TeamActivityPage(_props: Route.Compon
                   </div>
                 </div>
                 <div className="text-12 text-tertiary">
-                  {row.projects.length} project{row.projects.length === 1 ? "" : "s"}
+                  {t("admin.team_activity.project_count", { count: row.projects.length })}
                 </div>
               </div>
 
@@ -79,7 +81,7 @@ const TeamActivityPage = observer(function TeamActivityPage(_props: Route.Compon
             </div>
           ))}
           {members && members.length === 0 && (
-            <div className="py-12 text-center text-13 text-tertiary">No workspace members yet.</div>
+            <div className="py-12 text-center text-13 text-tertiary">{t("admin.team_activity.empty")}</div>
           )}
         </div>
       )}

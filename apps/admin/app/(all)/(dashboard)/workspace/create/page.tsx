@@ -5,6 +5,7 @@
  */
 
 import { observer } from "mobx-react";
+import { useTranslation } from "@plane/i18n";
 // components
 import { PageWrapper } from "@/components/common/page-wrapper";
 // types
@@ -13,11 +14,12 @@ import type { Route } from "./+types/page";
 import { WorkspaceCreateForm } from "./form";
 
 const WorkspaceCreatePage = observer(function WorkspaceCreatePage(_props: Route.ComponentProps) {
+  const { t } = useTranslation();
   return (
     <PageWrapper
       header={{
-        title: "Create a new workspace on this instance.",
-        description: "You will need to invite users from Workspace Settings after you create this workspace.",
+        title: t("admin.screens.workspace_create.title"),
+        description: t("admin.screens.workspace_create.description"),
       }}
     >
       <WorkspaceCreateForm />

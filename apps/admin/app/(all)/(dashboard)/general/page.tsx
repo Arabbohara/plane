@@ -5,6 +5,7 @@
  */
 
 import { observer } from "mobx-react";
+import { useTranslation } from "@plane/i18n";
 // components
 import { PageWrapper } from "@/components/common/page-wrapper";
 // hooks
@@ -16,13 +17,13 @@ import type { Route } from "./+types/page";
 
 function GeneralPage() {
   const { instance, instanceAdmins } = useInstance();
+  const { t } = useTranslation();
 
   return (
     <PageWrapper
       header={{
-        title: "General settings",
-        description:
-          "Change the name of your instance and instance admin e-mail addresses. Enable or disable telemetry in your instance.",
+        title: t("admin.screens.general.title"),
+        description: t("admin.screens.general.description"),
       }}
     >
       {instance && instanceAdmins && <GeneralConfigurationForm instance={instance} instanceAdmins={instanceAdmins} />}

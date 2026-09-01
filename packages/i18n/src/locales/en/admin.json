@@ -1,0 +1,115 @@
+{
+  "sidebar": {
+    "general": {
+      "name": "General",
+      "description": "Identify your instances and get key details."
+    },
+    "team_activity": {
+      "name": "Team activity",
+      "description": "See who's on what project and their latest update, in one place."
+    },
+    "email": {
+      "name": "Email",
+      "description": "Configure your SMTP controls."
+    },
+    "workspaces": {
+      "name": "Workspaces",
+      "description": "Manage all workspaces on this instance."
+    },
+    "authentication": {
+      "name": "Authentication",
+      "description": "Configure authentication modes."
+    },
+    "ai": {
+      "name": "Artificial intelligence",
+      "description": "Configure your OpenAI creds."
+    },
+    "image": {
+      "name": "Images in Vegecoop",
+      "description": "Allow third-party image libraries."
+    }
+  },
+  "header": {
+    "general": "General",
+    "ai": "Artificial Intelligence",
+    "email": "Email",
+    "authentication": "Authentication",
+    "image": "Image",
+    "google": "Google",
+    "github": "GitHub",
+    "gitlab": "GitLab",
+    "gitea": "Gitea",
+    "workspace": "Workspace",
+    "create": "Create",
+    "team_activity": "Team activity"
+  },
+  "screens": {
+    "general": {
+      "title": "General settings",
+      "description": "Change the name of your instance and instance admin e-mail addresses. Enable or disable telemetry in your instance."
+    },
+    "team_activity": {
+      "title": "Team activity",
+      "description": "See who's on what project, their progress, and their latest update — in one place."
+    },
+    "email": {
+      "title": "Secure emails from your own instance"
+    },
+    "ai": {
+      "title": "AI features for all your workspaces",
+      "description": "Configure your AI API credentials so Vegecoop AI features are turned on for all your workspaces."
+    },
+    "image": {
+      "title": "Third-party image libraries",
+      "description": "Let your users search and choose images from third-party libraries"
+    },
+    "authentication": {
+      "title": "Manage authentication modes for your instance",
+      "description": "Configure authentication modes for your team and restrict sign-ups to be invite only."
+    },
+    "workspace": {
+      "title": "Workspaces on this instance",
+      "description": "See all workspaces and control who can create them."
+    },
+    "workspace_create": {
+      "title": "Create a new workspace on this instance.",
+      "description": "You will need to invite users from Workspace Settings after you create this workspace."
+    }
+  },
+  "team_activity": {
+    "project_count": "{count, plural, one {# project} other {# projects}}",
+    "empty": "No workspace members yet."
+  },
+  "setup": {
+    "heading": "Setup your Vegecoop Instance",
+    "sub_heading": "Post setup you will be able to manage this Vegecoop instance."
+  },
+  "sign_in": {
+    "heading": "Manage your Vegecoop instance"
+  },
+  "new_user_popup": {
+    "description": "Instance setup done! Welcome to Vegecoop Project Management System instance portal. Start your journey with by creating your first workspace."
+  },
+  "oauth": {
+    "unique_codes": {
+      "name": "Unique codes",
+      "description": "Log in or sign up for Vegecoop using codes sent via email. You need to have set up SMTP to use this method."
+    },
+    "passwords": {
+      "name": "Passwords",
+      "description": "Allow members to create accounts with passwords and use it with their email addresses to sign in."
+    },
+    "google": {
+      "description": "Allow members to log in or sign up for Vegecoop with their Google accounts."
+    },
+    "github": {
+      "description": "Allow members to log in or sign up for Vegecoop with their GitHub accounts."
+    },
+    "gitlab": {
+      "description": "Allow members to log in or sign up to Vegecoop with their GitLab accounts."
+    },
+    "gitea": {
+      "description": "Allow members to log in or sign up to Vegecoop with their Gitea accounts."
+    }
+  }
+}
