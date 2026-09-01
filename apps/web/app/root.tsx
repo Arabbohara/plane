@@ -19,7 +19,6 @@ import favicon32 from "@/app/assets/favicon/favicon-32x32.png?url";
 import faviconIco from "@/app/assets/favicon/favicon.ico?url";
 import icon180 from "@/app/assets/icons/icon-180x180.png?url";
 import icon512 from "@/app/assets/icons/icon-512x512.png?url";
-import ogImage from "@/app/assets/og-image.png?url";
 import globalStyles from "@/styles/globals.css?url";
 import type { Route } from "./+types/root";
 // components
@@ -107,19 +106,10 @@ export const meta: Route.MetaFunction = () => [
     property: "og:description",
     content: "Manage work items, cycles, and product roadmaps in one place.",
   },
-  { property: "og:image", content: ogImage },
-  { property: "og:image:width", content: "1200" },
-  { property: "og:image:height", content: "630" },
-  { property: "og:image:alt", content: "Vegecoop Project Management System - Project management" },
   {
     name: "keywords",
     content: "project management, work items tracking, agile, scrum, kanban, collaboration, roadmaps, cycles",
   },
-  { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:image", content: ogImage },
-  { name: "twitter:image:width", content: "1200" },
-  { name: "twitter:image:height", content: "630" },
-  { name: "twitter:image:alt", content: "Vegecoop Project Management System - Project management" },
 ];
 
 export default function Root() {
