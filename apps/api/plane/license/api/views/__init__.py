@@ -26,3 +26,6 @@ from .workspace import (
     InstanceWorkSpaceAvailabilityCheckEndpoint,
     InstanceWorkSpaceEndpoint,
 )
+
+
+from .team_activity import TeamActivityEndpoint

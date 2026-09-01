@@ -11,6 +11,7 @@ import type { TSidebarMenuItem } from "./types";
 export function useSidebarMenu(): TSidebarMenuItem[] {
   return [
     coreSidebarMenuLinks.general,
+    coreSidebarMenuLinks["team-activity"],
     coreSidebarMenuLinks.email,
     coreSidebarMenuLinks.authentication,
     coreSidebarMenuLinks.workspace,
