@@ -144,6 +144,23 @@ containers:
 Postgres dumps are taken automatically on every deploy, stored in `~/backups/` on the server as
 `backup-<timestamp>.pgdump`, with the 14 most recent kept.
 
+## Migrating your local database to AWS (overwrite)
+
+[`deployments/vegecoop/migrate-local-db-to-aws.sh`](../deployments/vegecoop/migrate-local-db-to-aws.sh)
+replaces the live database on `$EC2_HOST` with a dump of your local database. This is
+destructive on the AWS side — read the script's header before running it. It always takes a
+backup of the current remote DB first and prints rollback instructions at the end.
+
+```bash
+EC2_KEY=/path/to/key.pem ./deployments/vegecoop/migrate-local-db-to-aws.sh
+```
+
+It requires `ssh`/`scp`/`docker` locally and a `.pem` key with access to the EC2 instance
+(the same one used for `EC2_SSH_KEY` in GitHub Actions, if you have a local copy — it is not
+retrievable from GitHub secrets). It stops `api`, `worker`, `beat-worker`, `live`, and
+`migrator` on the server during the restore, then brings everything back up (which also
+re-runs pending migrations against the restored data).
+
 ## Known quirks
 
 - On Windows checkouts of this repo, `packages/i18n/locales` is a symlink to
