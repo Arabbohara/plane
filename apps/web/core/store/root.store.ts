@@ -30,6 +30,8 @@ import type { IDashboardStore } from "./dashboard.store";
 import { DashboardStore } from "./dashboard.store";
 import type { IDepartmentStore } from "./department.store";
 import { DepartmentStore } from "./department.store";
+import type { IMemberUpdateStore } from "./member-update.store";
+import { MemberUpdateStore } from "./member-update.store";
 import type { IEditorAssetStore } from "./editor/asset.store";
 import { EditorAssetStore } from "./editor/asset.store";
 import type { IProjectEstimateStore } from "./estimates/project-estimate.store";
@@ -88,6 +90,7 @@ export class CoreRootStore {
   state: IStateStore;
   label: ILabelStore;
   department: IDepartmentStore;
+  memberUpdate: IMemberUpdateStore;
   dashboard: IDashboardStore;
   analytics: IAnalyticsStore;
   projectPages: IProjectPageStore;
@@ -126,6 +129,7 @@ export class CoreRootStore {
     this.state = new StateStore(this);
     this.label = new LabelStore(this);
     this.department = new DepartmentStore(this);
+    this.memberUpdate = new MemberUpdateStore(this);
     this.dashboard = new DashboardStore(this);
     this.multipleSelect = new MultipleSelectStore();
     this.projectInbox = new ProjectInboxStore(this);
@@ -162,6 +166,7 @@ export class CoreRootStore {
     this.state = new StateStore(this);
     this.label = new LabelStore(this);
     this.department = new DepartmentStore(this);
+    this.memberUpdate = new MemberUpdateStore(this);
     this.dashboard = new DashboardStore(this);
     this.projectInbox = new ProjectInboxStore(this);
     this.projectPages = new ProjectPageStore(this);

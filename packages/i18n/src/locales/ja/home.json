@@ -37,6 +37,15 @@
       "title": "クイックリンク",
       "title_plural": "クイックリンク"
     },
+    "project_progress": {
+      "title": "部署別プロジェクト進捗"
+    },
+    "member_updates": {
+      "title": "みんなの近況",
+      "placeholder": "進捗、詰まっていること、何でも自由に書いてください。",
+      "post": "投稿",
+      "empty": "まだ投稿がありません。最初の投稿をしてみましょう。"
+    },
     "recents": {
       "title": "最近",
       "empty": {

@@ -47,6 +47,7 @@ from .issue import (
     IssueVersion,
     IssueDescriptionVersion,
 )
+from .member_update import MemberUpdate
 from .module import Module, ModuleIssue, ModuleLink, ModuleMember, ModuleUserProperties
 from .notification import EmailNotificationLog, Notification, UserNotificationPreference
 from .page import Page, PageLabel, PageLog, ProjectPage, PageVersion

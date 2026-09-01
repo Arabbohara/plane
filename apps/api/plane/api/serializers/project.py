@@ -93,6 +93,7 @@ class ProjectCreateSerializer(BaseSerializer):
             "is_issue_type_enabled",
             "is_time_tracking_enabled",
             "department",
+            "progress",
         ]
 
         read_only_fields = [

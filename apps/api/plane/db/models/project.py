@@ -125,6 +125,9 @@ class Project(BaseModel):
         blank=True,
         related_name="department_projects",
     )
+    progress = models.PositiveSmallIntegerField(
+        default=0, validators=[MaxValueValidator(100)], verbose_name="Progress Percentage"
+    )
 
     def __init__(self, *args, **kwargs):
         # Track if timezone is provided, if so, don't override it with the workspace timezone when saving

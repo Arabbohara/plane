@@ -37,6 +37,15 @@
       "title": "Quicklink",
       "title_plural": "Quicklinks"
     },
+    "project_progress": {
+      "title": "Project progress by department"
+    },
+    "member_updates": {
+      "title": "Team updates",
+      "placeholder": "Share a quick update… progress, blockers, anything.",
+      "post": "Post",
+      "empty": "No updates yet. Be the first to share one."
+    },
     "recents": {
       "title": "Recents",
       "empty": {

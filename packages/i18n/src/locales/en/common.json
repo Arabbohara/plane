@@ -487,6 +487,7 @@
     "project_id": "Project ID",
     "project_timezone": "Project Timezone",
     "project_department": "Department",
+    "project_progress": "Progress",
     "created_on": "Created on",
     "updated_on": "Updated on",
     "completed_on": "Completed on",

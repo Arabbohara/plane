@@ -4,6 +4,7 @@
 
 from .base import BaseSerializer
 from .department import DepartmentSerializer
+from .member_update import MemberUpdateSerializer
 from .user import (
     UserSerializer,
     UserLiteSerializer,

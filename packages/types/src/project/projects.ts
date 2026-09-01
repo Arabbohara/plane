@@ -43,6 +43,7 @@ export interface IPartialProject {
   project_lead?: IUserLite | string | null;
   network?: number;
   department?: string | null;
+  progress?: number;
   // Timestamps
   created_at?: Date;
   updated_at?: Date;

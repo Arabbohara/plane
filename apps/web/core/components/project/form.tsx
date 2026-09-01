@@ -161,6 +161,7 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
       identifier: formData.identifier,
       description: formData.description,
       department: formData.department,
+      progress: formData.progress,
 
       logo_props: formData.logo_props,
       timezone: formData.timezone,
@@ -384,6 +385,31 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
                   onChange={(departmentId) => onChange(departmentId)}
                   disabled={!isAdmin}
                 />
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <h4 className="text-13">{t("common.project_progress")}</h4>
+            <Controller
+              control={control}
+              name="progress"
+              render={({ field: { value, onChange } }) => (
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={value ?? 0}
+                    onChange={(e) => {
+                      const next = Number(e.target.value);
+                      onChange(Number.isNaN(next) ? 0 : Math.min(100, Math.max(0, next)));
+                    }}
+                    disabled={!isAdmin}
+                    className="w-20"
+                  />
+                  <span className="text-13 text-secondary">%</span>
+                </div>
               )}
             />
           </div>

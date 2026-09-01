@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -12,22 +12,16 @@ import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 // plane imports
 import { useTranslation } from "@plane/i18n";
 import { Logo } from "@plane/propel/emoji-icon-picker";
-import type { TProject } from "@plane/types";
 // hooks
 import { useDepartment } from "@/hooks/store/use-department";
 import { useProject } from "@/hooks/store/use-project";
-
-type TDepartmentGroup = {
-  departmentId: string;
-  departmentName: string;
-  projects: TProject[];
-};
+import { useDepartmentProjectGroups } from "@/hooks/use-department-project-groups";
 
 export const ProjectDepartmentSummary = observer(function ProjectDepartmentSummary() {
   const { workspaceSlug } = useParams();
   const { t } = useTranslation();
-  const { filteredProjectIds, getProjectById } = useProject();
-  const { getDepartmentById, fetchDepartments } = useDepartment();
+  const { filteredProjectIds } = useProject();
+  const { fetchDepartments } = useDepartment();
   const [collapsedDepartments, setCollapsedDepartments] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -35,25 +29,7 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSlug]);
 
-  const departmentGroups: TDepartmentGroup[] = useMemo(() => {
-    const groups = new Map<string, TProject[]>();
-    (filteredProjectIds ?? []).forEach((projectId) => {
-      const project = getProjectById(projectId);
-      if (!project) return;
-      const departmentId = project.department ?? "";
-      const existing = groups.get(departmentId);
-      if (existing) existing.push(project);
-      else groups.set(departmentId, [project]);
-    });
-
-    return Array.from(groups.entries())
-      .map(([departmentId, projects]) => ({
-        departmentId,
-        departmentName: departmentId ? (getDepartmentById(departmentId)?.name ?? departmentId) : t("no_department"),
-        projects,
-      }))
-      .sort((a, b) => b.projects.length - a.projects.length || a.departmentName.localeCompare(b.departmentName, "ja"));
-  }, [filteredProjectIds, getProjectById, getDepartmentById, t]);
+  const departmentGroups = useDepartmentProjectGroups();
 
   const toggleDepartment = (departmentId: string) => {
     setCollapsedDepartments((prev) => {
@@ -78,7 +54,7 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
           </span>
         </div>
         <div className="divide-y divide-subtle">
-          {departmentGroups.map(({ departmentId, departmentName, projects }) => {
+          {departmentGroups.map(({ departmentId, departmentName, projects, averageProgress }) => {
             const isCollapsed = collapsedDepartments.has(departmentId);
             return (
               <div key={departmentId || "__no_department__"}>
@@ -95,8 +71,19 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
                     )}
                     <span className="text-13 font-medium text-primary">{departmentName}</span>
                   </span>
-                  <span className="rounded-full bg-surface-2 px-2 py-0.5 text-12 text-secondary">
-                    {t("project_departments.total_projects", { count: projects.length })}
+                  <span className="flex items-center gap-3">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-2">
+                        <span
+                          className="block h-full rounded-full bg-accent-primary"
+                          style={{ width: `${averageProgress}%` }}
+                        />
+                      </span>
+                      <span className="w-8 text-right text-12 text-secondary">{averageProgress}%</span>
+                    </span>
+                    <span className="rounded-full bg-surface-2 px-2 py-0.5 text-12 text-secondary">
+                      {t("project_departments.total_projects", { count: projects.length })}
+                    </span>
                   </span>
                 </button>
                 {!isCollapsed && (
@@ -108,7 +95,16 @@ export const ProjectDepartmentSummary = observer(function ProjectDepartmentSumma
                         className="flex items-center gap-2 py-1.5 pr-4 pl-10 text-13 text-secondary hover:bg-surface-1 hover:text-primary"
                       >
                         <Logo logo={project.logo_props} size={14} />
-                        <span>{project.name}</span>
+                        <span className="flex-1 truncate">{project.name}</span>
+                        <span className="h-1.5 w-16 flex-shrink-0 overflow-hidden rounded-full bg-surface-2">
+                          <span
+                            className="block h-full rounded-full bg-accent-primary"
+                            style={{ width: `${project.progress ?? 0}%` }}
+                          />
+                        </span>
+                        <span className="w-8 flex-shrink-0 text-right text-12 text-secondary">
+                          {project.progress ?? 0}%
+                        </span>
                       </Link>
                     ))}
                   </div>
