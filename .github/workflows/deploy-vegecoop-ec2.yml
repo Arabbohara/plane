@@ -22,6 +22,15 @@ jobs:
             set -e
             cd /home/ec2-user/plane
 
+            echo "== Freeing disk space =="
+            df -h / | tail -1
+            # Old images and build cache pile up with every rebuild and filled the disk once.
+            # Only build cache and images unused by any container are removed; volumes
+            # (database, uploads) are never touched.
+            docker builder prune -af
+            docker image prune -af
+            df -h / | tail -1
+
             echo "== Backing up database =="
             mkdir -p /home/ec2-user/backups
             docker exec plane-db sh -c 'pg_dump -U plane -d plane -Fc -f /tmp/backup.pgdump'
