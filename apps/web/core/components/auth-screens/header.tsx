@@ -70,7 +70,7 @@ export function AuthHeaderBase(props: TAuthHeaderBase) {
   const { pageTitle, additionalAction } = props;
   return (
     <>
-      <PageHead title={pageTitle + " - Plane"} />
+      <PageHead title={pageTitle + " - Vegecoop Project Management System"} />
       <div className="sticky top-0 flex w-full flex-shrink-0 items-center justify-between gap-6">
         <Link href="/">
           <VegecoopLogo height={20} className="text-primary" />

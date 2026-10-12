@@ -395,7 +395,8 @@ class TestMagicSignUp:
     @patch("plane.bgtasks.magic_link_code_task.magic_link.delay")
     def test_magic_code_sign_up(self, mock_magic_link, django_client, api_client, setup_instance):
         """Test successful magic link sign-up process"""
-        email = "newuser@plane.so"
+        # Sign-up is restricted to the organization domain (RESTRICT_SIGNUP_DOMAIN)
+        email = "newuser@vegecoop.co.jp"
 
         # First generate a magic link token
         gen_url = reverse("magic-generate")
@@ -427,7 +428,7 @@ class TestMagicSignUp:
     @patch("plane.bgtasks.magic_link_code_task.magic_link.delay")
     def test_magic_sign_up_with_next_path(self, mock_magic_link, django_client, api_client, setup_instance):
         """Test magic sign-up with next_path parameter"""
-        email = "newuser2@plane.so"
+        email = "newuser2@vegecoop.co.jp"
 
         # First generate a magic link token
         gen_url = reverse("magic-generate")

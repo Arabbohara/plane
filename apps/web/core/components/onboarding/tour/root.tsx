@@ -41,7 +41,7 @@ const TOUR_STEPS: {
     key: "work-items",
     title: "Plan with work items",
     description:
-      "The work item is the building block of the Plane. Most concepts in Plane are either associated with work items and their properties.",
+      "The work item is the building block of Vegecoop. Most concepts in Vegecoop are either associated with work items and their properties.",
     image: IssuesTour,
     nextStep: "cycles",
   },
