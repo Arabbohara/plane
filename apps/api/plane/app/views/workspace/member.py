@@ -23,6 +23,7 @@ from plane.app.serializers import (
 from plane.app.views.base import BaseAPIView
 from plane.db.models import Project, ProjectMember, WorkspaceMember, DraftIssue
 from plane.utils.cache import invalidate_cache
+from plane.utils.department_access import remove_workspace_member_departments, resync_member_department_roles
 
 from .. import BaseViewSet
 
@@ -92,6 +93,9 @@ class WorkSpaceMemberViewSet(BaseViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            if "role" in request.data:
+                # Department-granted project roles follow the new workspace role
+                resync_member_department_roles(workspace_member.workspace_id, workspace_member.member_id)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -144,6 +148,8 @@ class WorkSpaceMemberViewSet(BaseViewSet):
         _ = ProjectMember.objects.filter(
             workspace__slug=slug, member_id=workspace_member.member_id, is_active=True
         ).update(is_active=False, updated_at=timezone.now())
+
+        remove_workspace_member_departments(workspace_member.workspace_id, workspace_member.member_id)
 
         workspace_member.is_active = False
         workspace_member.save()
@@ -198,6 +204,8 @@ class WorkSpaceMemberViewSet(BaseViewSet):
         _ = ProjectMember.objects.filter(
             workspace__slug=slug, member_id=workspace_member.member_id, is_active=True
         ).update(is_active=False, updated_at=timezone.now())
+
+        remove_workspace_member_departments(workspace_member.workspace_id, workspace_member.member_id)
 
         # # Deactivate the user
         workspace_member.is_active = False

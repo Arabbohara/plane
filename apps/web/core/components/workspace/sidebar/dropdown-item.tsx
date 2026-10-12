@@ -7,7 +7,7 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { Settings, UserPlus } from "lucide-react";
+import { Network, Settings, UserPlus } from "lucide-react";
 import { Menu } from "@headlessui/react";
 // plane imports
 import { EUserPermissions } from "@plane/constants";
@@ -98,6 +98,22 @@ const SidebarDropdownItem = observer(function SidebarDropdownItem(props: TProps)
                 >
                   <Settings className="my-auto h-4 w-4 flex-shrink-0" />
                   <span className="my-auto text-13 font-medium whitespace-nowrap">{t("settings")}</span>
+                </Link>
+              )}
+              {workspace?.role === EUserPermissions.GUEST && (
+                // Guests have no settings access, but can see which departments they belong to
+                <Link
+                  href={`/${workspace.slug}/settings/departments`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClose();
+                  }}
+                  className="flex gap-1.5 rounded-md border border-strong bg-layer-2 px-2.5 py-1.5 text-secondary transition-colors hover:border-strong hover:text-secondary hover:shadow-raised-100"
+                >
+                  <Network className="my-auto h-4 w-4 flex-shrink-0" />
+                  <span className="my-auto text-13 font-medium whitespace-nowrap">
+                    {t("workspace_settings.settings.departments.title")}
+                  </span>
                 </Link>
               )}
               {[EUserPermissions.ADMIN].includes(workspace?.role) && (

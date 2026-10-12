@@ -24,7 +24,7 @@ from .project.member import (
     ProjectMemberPreferenceEndpoint,
 )
 
-from .project.department import DepartmentViewSet
+from .project.department import DepartmentViewSet, DepartmentMemberViewSet, DepartmentJoinEndpoint
 
 from .user.base import (
     UserEndpoint,

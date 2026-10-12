@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
+import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { PlusIcon } from "@plane/propel/icons";
@@ -16,19 +17,30 @@ import { CustomSearchSelect, Input } from "@plane/ui";
 import { cn, generateRandomColor, hslToHex } from "@plane/utils";
 // hooks
 import { useDepartment } from "@/hooks/store/use-department";
+import { useUserPermissions } from "@/hooks/store/user";
 
 type Props = {
   value: string | null | undefined;
   onChange: (departmentId: string | null, prefix?: string) => void;
   disabled?: boolean;
+  className?: string;
   buttonClassName?: string;
+  /** Large input-style button (settings form); set false for the compact attribute row */
+  input?: boolean;
+  noChevron?: boolean;
 };
 
 export const DepartmentSelect = observer(function DepartmentSelect(props: Props) {
-  const { value, onChange, disabled, buttonClassName } = props;
+  const { value, onChange, disabled, className, buttonClassName, input = true, noChevron = false } = props;
   const { workspaceSlug } = useParams();
   const { t } = useTranslation();
   const { workspaceDepartments, fetchDepartments, createDepartment } = useDepartment();
+  const { allowPermissions } = useUserPermissions();
+  // Guests cannot create departments (the API rejects it too)
+  const canCreateDepartment = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.WORKSPACE
+  );
 
   const [isCreating, setIsCreating] = useState(false);
   const [newName, setNewName] = useState("");
@@ -88,47 +100,51 @@ export const DepartmentSelect = observer(function DepartmentSelect(props: Props)
           <span className="text-placeholder">{t("common.project_department")}</span>
         )
       }
-      buttonClassName={cn("rounded-md !border-subtle font-medium !shadow-none", buttonClassName)}
-      input
+      className={className}
+      buttonClassName={cn("rounded-md !border-subtle !shadow-none", { "font-medium": input }, buttonClassName)}
+      input={input}
+      noChevron={noChevron}
       disabled={disabled}
       footerOption={
-        <div className="mt-2 border-t border-subtle px-2 pt-2">
-          {isCreating ? (
-            <div className="flex flex-col gap-1.5">
-              <Input
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                placeholder={t("project_department_placeholder")}
-                className="text-12"
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus
-              />
-              <Input
-                value={newPrefix}
-                onChange={(e) => setNewPrefix(e.target.value.toUpperCase().slice(0, 10))}
-                placeholder="VGL"
-                className="text-12 uppercase"
-              />
-              <div className="flex items-center gap-1.5">
-                <Button size="sm" onClick={handleCreate} loading={isSubmitting} disabled={!newName.trim()}>
-                  {t("add")}
-                </Button>
-                <Button size="sm" variant="ghost" onClick={() => setIsCreating(false)}>
-                  {t("cancel")}
-                </Button>
+        canCreateDepartment && (
+          <div className="mt-2 border-t border-subtle px-2 pt-2">
+            {isCreating ? (
+              <div className="flex flex-col gap-1.5">
+                <Input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder={t("project_department_placeholder")}
+                  className="text-12"
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus
+                />
+                <Input
+                  value={newPrefix}
+                  onChange={(e) => setNewPrefix(e.target.value.toUpperCase().slice(0, 10))}
+                  placeholder="VGL"
+                  className="text-12 uppercase"
+                />
+                <div className="flex items-center gap-1.5">
+                  <Button size="sm" onClick={handleCreate} loading={isSubmitting} disabled={!newName.trim()}>
+                    {t("add")}
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setIsCreating(false)}>
+                    {t("cancel")}
+                  </Button>
+                </div>
               </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              className="flex w-full items-center gap-1 rounded-sm px-1 py-1.5 text-13 text-secondary hover:bg-layer-transparent-hover"
-              onClick={() => setIsCreating(true)}
-            >
-              <PlusIcon className="h-3.5 w-3.5" />
-              {t("add")} {t("common.project_department")}
-            </button>
-          )}
-        </div>
+            ) : (
+              <button
+                type="button"
+                className="flex w-full items-center gap-1 rounded-sm px-1 py-1.5 text-13 text-secondary hover:bg-layer-transparent-hover"
+                onClick={() => setIsCreating(true)}
+              >
+                <PlusIcon className="h-3.5 w-3.5" />
+                {t("add")} {t("common.project_department")}
+              </button>
+            )}
+          </div>
+        )
       }
     />
   );

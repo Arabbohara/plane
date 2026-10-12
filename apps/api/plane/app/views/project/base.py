@@ -40,6 +40,7 @@ from plane.db.models import (
     WorkspaceMember,
 )
 from plane.db.models.intake import IntakeIssueStatus
+from plane.utils.department_access import sync_project_department_access
 from plane.utils.host import base_host
 from plane.utils.order_queryset import PROJECT_ORDER_BY_ALLOWLIST, sanitize_order_by
 
@@ -280,6 +281,9 @@ class ProjectViewSet(BaseViewSet):
                     role=ROLE.ADMIN.value,
                 )
 
+            # Give members of the project's department access
+            sync_project_department_access(serializer.instance)
+
             State.objects.bulk_create(
                 [
                     State(
@@ -341,6 +345,8 @@ class ProjectViewSet(BaseViewSet):
 
         project = Project.objects.get(pk=pk, workspace__slug=slug)
         intake_view = request.data.get("inbox_view", project.intake_view)
+        previous_department_id = project.department_id
+        previous_network = project.network
         current_instance = json.dumps(ProjectSerializer(project).data, cls=DjangoJSONEncoder)
         if project.archived_at:
             return Response(
@@ -357,6 +363,7 @@ class ProjectViewSet(BaseViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            sync_project_department_access(serializer.instance, previous_department_id, previous_network)
             if intake_view:
                 intake = Intake.objects.filter(project=project, is_default=True).first()
                 if not intake:

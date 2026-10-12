@@ -6,15 +6,17 @@ import re
 
 from rest_framework import serializers
 
-from plane.db.models import Department
+from plane.db.models import Department, DepartmentMember
 
 from .base import BaseSerializer
 
 
 class DepartmentSerializer(BaseSerializer):
+    project_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Department
-        fields = ["id", "name", "prefix", "color", "sort_order", "workspace_id"]
+        fields = ["id", "name", "prefix", "color", "sort_order", "workspace_id", "project_count"]
         read_only_fields = ["workspace_id"]
 
     def validate_prefix(self, value):
@@ -35,3 +37,10 @@ class DepartmentSerializer(BaseSerializer):
             raise serializers.ValidationError("Department with this name already exists.")
 
         return value
+
+
+class DepartmentMemberSerializer(BaseSerializer):
+    class Meta:
+        model = DepartmentMember
+        fields = ["id", "department_id", "member_id", "role", "full_access", "workspace_id", "created_at"]
+        read_only_fields = ["department_id", "member_id", "workspace_id", "created_at"]

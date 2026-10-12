@@ -3,7 +3,7 @@
 # See the LICENSE file for details.
 
 from .base import BaseSerializer
-from .department import DepartmentSerializer
+from .department import DepartmentSerializer, DepartmentMemberSerializer
 from .member_update import MemberUpdateSerializer
 from .user import (
     UserSerializer,

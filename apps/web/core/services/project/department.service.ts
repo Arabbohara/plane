@@ -6,7 +6,7 @@
 
 // services
 import { API_BASE_URL } from "@plane/constants";
-import type { TDepartment } from "@plane/types";
+import type { TDepartment, TDepartmentMember } from "@plane/types";
 import { APIService } from "@/services/api.service";
 
 export class DepartmentService extends APIService {
@@ -44,6 +44,66 @@ export class DepartmentService extends APIService {
 
   async deleteDepartment(workspaceSlug: string, departmentId: string): Promise<void> {
     return this.delete(`/api/workspaces/${workspaceSlug}/departments/${departmentId}/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getDepartmentMembers(workspaceSlug: string): Promise<TDepartmentMember[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/departments/members/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async addDepartmentMembers(
+    workspaceSlug: string,
+    departmentId: string,
+    data: { members: { member_id: string; role: number }[] }
+  ): Promise<TDepartmentMember[]> {
+    return this.post(`/api/workspaces/${workspaceSlug}/departments/${departmentId}/members/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async updateDepartmentMember(
+    workspaceSlug: string,
+    departmentId: string,
+    departmentMemberId: string,
+    data: Partial<Pick<TDepartmentMember, "role" | "full_access">>
+  ): Promise<TDepartmentMember> {
+    return this.patch(
+      `/api/workspaces/${workspaceSlug}/departments/${departmentId}/members/${departmentMemberId}/`,
+      data
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async removeDepartmentMember(workspaceSlug: string, departmentId: string, departmentMemberId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/departments/${departmentId}/members/${departmentMemberId}/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async joinDepartment(workspaceSlug: string, departmentId: string): Promise<TDepartmentMember> {
+    return this.post(`/api/workspaces/${workspaceSlug}/departments/${departmentId}/join/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async leaveDepartment(workspaceSlug: string, departmentId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/departments/${departmentId}/join/`)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;

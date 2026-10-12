@@ -232,6 +232,14 @@ class ProjectMember(ProjectBaseModel):
     preferences = models.JSONField(default=get_default_preferences)
     sort_order = models.FloatField(default=65535)
     is_active = models.BooleanField(default=True)
+    # Set when the membership was granted through a department; null means it was added manually
+    source_department = models.ForeignKey(
+        "db.Department",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="department_project_members",
+    )
 
     def save(self, *args, **kwargs):
         if self._state.adding and self.member:

@@ -46,8 +46,13 @@ services:
     env_file:
       - ./apps/api/.env
     depends_on:
-      - plane-db
-      - plane-redis
+      plane-db:
+        condition: service_started
+      plane-redis:
+        condition: service_started
+      # Start the new code only after its migrations are applied
+      migrator:
+        condition: service_completed_successfully
 
   worker:
     container_name: bgworker

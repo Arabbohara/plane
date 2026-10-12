@@ -46,7 +46,14 @@ function ProjectAttributes(props: Props) {
           name="department"
           control={control}
           render={({ field: { value } }) => (
-            <DepartmentSelect value={value} onChange={handleDepartmentChange} buttonClassName="h-full" />
+            <DepartmentSelect
+              value={value}
+              onChange={handleDepartmentChange}
+              input={false}
+              noChevron
+              className="h-full"
+              buttonClassName="h-full"
+            />
           )}
         />
       </div>

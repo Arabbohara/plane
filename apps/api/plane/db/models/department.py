@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # See the LICENSE file for details.
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
 
@@ -39,3 +40,29 @@ class Department(BaseModel):
 
     def __str__(self):
         return str(self.name)
+
+
+class DepartmentMember(BaseModel):
+    workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="workspace_department_member")
+    department = models.ForeignKey("db.Department", on_delete=models.CASCADE, related_name="department_members")
+    member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="member_department")
+    # Role the member receives in every project of the department (Admin/Member/Guest)
+    role = models.PositiveSmallIntegerField(choices=((20, "Admin"), (15, "Member"), (5, "Guest")), default=15)
+    # Admin-added members get every project; self-joined members only get public projects
+    full_access = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["department", "member"],
+                condition=Q(deleted_at__isnull=True),
+                name="unique_department_member_when_not_deleted",
+            ),
+        ]
+        verbose_name = "Department Member"
+        verbose_name_plural = "Department Members"
+        db_table = "department_members"
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return f"{self.member_id} <{self.department_id}>"

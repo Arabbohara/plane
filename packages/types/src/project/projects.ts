@@ -17,6 +17,18 @@ export interface TDepartment {
   color?: string;
   sort_order?: number;
   workspace_id?: string;
+  project_count?: number;
+}
+
+export interface TDepartmentMember {
+  id: string;
+  department_id: string;
+  member_id: string;
+  role: EUserProjectRoles;
+  /** Admin-added members get every project; self-joined members only public projects */
+  full_access: boolean;
+  workspace_id: string;
+  created_at?: string;
 }
 
 export enum EUserProjectRoles {
@@ -106,6 +118,8 @@ export interface IProjectMemberLite {
 export type TProjectMembership = {
   member: string;
   role: TUserPermissions | EUserProjectRoles;
+  /** Department that granted this membership; null when it was added manually */
+  source_department?: string | null;
 } & (
   | {
       id: string;

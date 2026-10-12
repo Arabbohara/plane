@@ -190,7 +190,7 @@ class ProjectMemberRoleSerializer(DynamicBaseSerializer):
 
     class Meta:
         model = ProjectMember
-        fields = ("id", "role", "member", "project", "original_role", "created_at")
+        fields = ("id", "role", "member", "project", "original_role", "created_at", "source_department")
         read_only_fields = ["original_role", "created_at"]
 
 

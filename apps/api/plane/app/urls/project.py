@@ -19,6 +19,8 @@ from plane.app.views import (
     ProjectArchiveUnarchiveEndpoint,
     ProjectMemberPreferenceEndpoint,
     DepartmentViewSet,
+    DepartmentMemberViewSet,
+    DepartmentJoinEndpoint,
 )
 
 
@@ -59,6 +61,26 @@ urlpatterns = [
         "workspaces/<str:slug>/departments/<uuid:pk>/",
         DepartmentViewSet.as_view({"patch": "partial_update", "delete": "destroy"}),
         name="department",
+    ),
+    path(
+        "workspaces/<str:slug>/departments/members/",
+        DepartmentMemberViewSet.as_view({"get": "list"}),
+        name="department-members",
+    ),
+    path(
+        "workspaces/<str:slug>/departments/<uuid:department_id>/members/",
+        DepartmentMemberViewSet.as_view({"post": "create"}),
+        name="department-members",
+    ),
+    path(
+        "workspaces/<str:slug>/departments/<uuid:department_id>/members/<uuid:pk>/",
+        DepartmentMemberViewSet.as_view({"patch": "partial_update", "delete": "destroy"}),
+        name="department-members",
+    ),
+    path(
+        "workspaces/<str:slug>/departments/<uuid:department_id>/join/",
+        DepartmentJoinEndpoint.as_view(),
+        name="department-join",
     ),
     path(
         "workspaces/<str:slug>/projects/<uuid:project_id>/invitations/",

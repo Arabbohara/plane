@@ -89,10 +89,14 @@ class ProjectMemberViewSet(BaseViewSet):
         ):
             project_member.role = member_roles[str(project_member.member_id)]
             project_member.is_active = True
+            # An explicit add turns a department-granted membership into a manual one
+            project_member.source_department = None
             bulk_project_members.append(project_member)
 
         # Update the roles of the existing members
-        ProjectMember.objects.bulk_update(bulk_project_members, ["is_active", "role"], batch_size=100)
+        ProjectMember.objects.bulk_update(
+            bulk_project_members, ["is_active", "role", "source_department"], batch_size=100
+        )
 
         # Get the minimum sort_order for each member in the workspace
         member_sort_orders = (
@@ -165,7 +169,9 @@ class ProjectMemberViewSet(BaseViewSet):
             member__member_workspace__is_active=True,
         ).select_related("project", "member", "workspace")
 
-        serializer = ProjectMemberRoleSerializer(project_members, fields=("id", "member", "role"), many=True)
+        serializer = ProjectMemberRoleSerializer(
+            project_members, fields=("id", "member", "role", "source_department"), many=True
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])

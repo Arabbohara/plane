@@ -3,7 +3,7 @@
     "label": "Impostazioni dello spazio di lavoro",
     "page_label": "{workspace} - Impostazioni generali",
     "key_created": "Chiave creata",
-    "copy_key": "Copia e salva questa chiave segreta in Plane Pages. Non potrai vederla dopo aver cliccato Chiudi. È stato scaricato un file CSV contenente la chiave.",
+    "copy_key": "Copia e salva questa chiave segreta in Vegecoop Pages. Non potrai vederla dopo aver cliccato Chiudi. È stato scaricato un file CSV contenente la chiave.",
     "token_copied": "Token copiato negli appunti.",
     "settings": {
       "general": {
@@ -64,6 +64,41 @@
             "invalid": "L'email non è valida"
           }
         }
+      },
+      "departments": {
+        "title": "Reparti",
+        "description": "I membri di un reparto hanno accesso a tutti i progetti di quel reparto.",
+        "empty_state": "Nessun reparto ancora.",
+        "projects_count": "{count, plural, one {# progetto} many {# di progetti} other {# progetti}}",
+        "members_count": "{count, plural, one {# membro} many {# di membri} other {# membri}}",
+        "join": "Unisciti",
+        "leave": "Esci",
+        "add_members": "Aggiungi membri",
+        "no_members": "Nessun membro ancora",
+        "remove_member": "Rimuovi dal reparto",
+        "joined_toast": "Si è unito a {name}",
+        "left_toast": "Ha lasciato {name}",
+        "members_added_toast": "Membri aggiunti",
+        "member_removed_toast": "Membro rimosso",
+        "add_department": "Aggiungi reparto",
+        "name_placeholder": "Nome del reparto",
+        "prefix_placeholder": "Prefisso (es. SLS)",
+        "color": "Colore",
+        "created_toast": "Reparto creato",
+        "updated_toast": "Reparto aggiornato",
+        "deleted_toast": "Reparto eliminato",
+        "member_updated_toast": "Membro aggiornato",
+        "delete_title": "Elimina reparto",
+        "delete_description": "Eliminare {name}? I progetti vengono mantenuti e i membri conservano l'accesso attuale ai progetti.",
+        "leave_title": "Lascia reparto",
+        "leave_description": "Lasciare {name}? Perderà l'accesso ai progetti ottenuti tramite questo reparto.",
+        "remove_title": "Rimuovi membro",
+        "remove_description": "Rimuovere {name} da questo reparto? Perderà l'accesso ai progetti ottenuti tramite il reparto.",
+        "access_all": "Tutti i progetti",
+        "access_public": "Solo progetti pubblici",
+        "self_join_hint": "Unendosi autonomamente a un reparto si ottiene l'accesso ai suoi progetti pubblici. Un amministratore può concedere l'accesso ai progetti privati.",
+        "via_department": "tramite {name}",
+        "via_department_tooltip": "Aggiunto tramite un reparto. Lasciare il reparto rimuove questo accesso."
       },
       "billing_and_plans": {
         "heading": "Fatturazione e piani",
@@ -161,7 +196,7 @@
         "generating": "Generazione in corso",
         "delete": {
           "title": "Elimina token API",
-          "description": "Qualsiasi applicazione che utilizza questo token non avrà più accesso ai dati di Plane. Questa azione non può essere annullata.",
+          "description": "Qualsiasi applicazione che utilizza questo token non avrà più accesso ai dati di Vegecoop. Questa azione non può essere annullata.",
           "success": {
             "title": "Successo!",
             "message": "Il token API è stato eliminato con successo"
@@ -176,7 +211,7 @@
         "title": "Integrazioni",
         "heading": "Integrazioni",
         "description": "Connettiti a strumenti e servizi popolari per sincronizzare il tuo lavoro nell'intero ecosistema del tuo flusso di lavoro.",
-        "page_title": "Lavora con i tuoi dati Plane nelle app disponibili o nelle tue.",
+        "page_title": "Lavora con i tuoi dati Vegecoop nelle app disponibili o nelle tue.",
         "page_description": "Visualizza tutte le integrazioni utilizzate da questo workspace o da te."
       },
       "imports": {
@@ -258,7 +293,7 @@
       "project_states": {
         "title": "Stati del progetto",
         "heading": "Visualizza una panoramica dei progressi per tutti i progetti.",
-        "description": "Gli stati dei progetti sono una funzionalità esclusiva di Plane per tracciare i progressi di tutti i tuoi progetti in base a qualsiasi proprietà del progetto.",
+        "description": "Gli stati dei progetti sono una funzionalità esclusiva di Vegecoop per tracciare i progressi di tutti i tuoi progetti in base a qualsiasi proprietà del progetto.",
         "go_to_settings": "Vai alle impostazioni"
       },
       "projects": {
@@ -303,14 +338,14 @@
         "install": "Installa",
         "installed": "Installato",
         "configure": "Configura",
-        "app_available": "Hai reso questa app disponibile per l'uso con un workspace Plane",
+        "app_available": "Hai reso questa app disponibile per l'uso con un workspace Vegecoop",
         "app_credentials_regenrated": {
           "title": "Le credenziali dell'app sono state rigenerate con successo",
           "description": "Sostituisci il client secret ovunque venga utilizzato. Il secret precedente non è più valido."
         },
         "app_created": {
           "title": "App creata con successo",
-          "description": "Usa le credenziali per installare l'app in uno spazio di lavoro Plane"
+          "description": "Usa le credenziali per installare l'app in uno spazio di lavoro Vegecoop"
         },
         "installed_apps": "App installate",
         "all_apps": "Tutte le app",
@@ -351,10 +386,10 @@
         },
         "redirect_uris": {
           "label": "URI di reindirizzamento (separate da spazi)",
-          "description": "Gli utenti verranno reindirizzati a questo percorso dopo essersi autenticati con Plane.",
+          "description": "Gli utenti verranno reindirizzati a questo percorso dopo essersi autenticati con Vegecoop.",
           "placeholder": "https://example.com https://example.com/"
         },
-        "app_available_description": "Connetti un workspace Plane per iniziare a usarla",
+        "app_available_description": "Connetti un workspace Vegecoop per iniziare a usarla",
         "client_id_and_secret": "ID e Secret Cliente",
         "client_id_and_secret_description": "Copia e salva questa chiave segreta. Non potrai più vedere questa chiave dopo aver cliccato su Chiudi.",
         "client_id_and_secret_download": "Puoi scaricare un CSV con la chiave da qui.",
@@ -403,12 +438,12 @@
         "workspace_permissions": "Permessi del workspace",
         "workspace_permissions_description": "I permessi del workspace sono utilizzati per concedere l'accesso al workspace.",
         "with_the_permissions": "con i permessi",
-        "app_consent_title": "{app} richiede l'accesso al tuo workspace e profilo Plane.",
+        "app_consent_title": "{app} richiede l'accesso al tuo workspace e profilo Vegecoop.",
         "choose_workspace_to_connect_app_with": "Scegli un workspace a cui connettere l'app",
         "app_consent_workspace_permissions_title": "{app} vorrebbe",
         "app_consent_user_permissions_title": "{app} può anche richiedere il permesso di un utente per le seguenti risorse. Questi permessi saranno richiesti e autorizzati solo da un utente.",
         "app_consent_accept_title": "Accettando",
-        "app_consent_accept_1": "Concedi all'app l'accesso ai tuoi dati Plane ovunque tu possa utilizzare l'app dentro o fuori Plane",
+        "app_consent_accept_1": "Concedi all'app l'accesso ai tuoi dati Vegecoop ovunque tu possa utilizzare l'app dentro o fuori Vegecoop",
         "app_consent_accept_2": "Accetti la Privacy Policy e i Termini d'Uso di {app}",
         "accepting": "Accettazione in corso...",
         "accept": "Accetta",
@@ -450,7 +485,7 @@
         "upload_and_save": "Carica e salva",
         "app_consent_no_access_title": "Richiesta di installazione",
         "app_consent_no_access_description": "Questa app può essere installata solo dopo che un amministratore del workspace l'ha installata. Contatta l'amministratore del tuo workspace per procedere.",
-        "app_consent_unapproved_title": "Questa app non è stata ancora esaminata o approvata da Plane.",
+        "app_consent_unapproved_title": "Questa app non è stata ancora esaminata o approvata da Vegecoop.",
         "app_consent_unapproved_description": "Assicurati di fidarti di questa app prima di connetterla al tuo spazio di lavoro.",
         "go_to_app": "Vai all'app",
         "enable_app_mentions": "Abilita menzioni dell'app",
@@ -475,12 +510,12 @@
         }
       },
       "plane-intelligence": {
-        "title": "Plane AI",
-        "heading": "Plane AI",
+        "title": "Vegecoop AI",
+        "heading": "Vegecoop AI",
         "description": "Vedi il tuo lavoro diventare più intelligente e più veloce con l'IA che è connessa in modo nativo al tuo lavoro e alla tua base di conoscenza."
       },
       "runners": {
-        "title": "Plane Runner",
+        "title": "Vegecoop Runner",
         "heading": "Script",
         "new_script": "Nuovo script",
         "description": "Automatizza i tuoi flussi di lavoro con script personalizzati e regole di automazione."
@@ -489,7 +524,7 @@
     "empty_state": {
       "api_tokens": {
         "title": "Nessun token API creato",
-        "description": "Le API di Plane possono essere utilizzate per integrare i tuoi dati in Plane con qualsiasi sistema esterno. Crea un token per iniziare."
+        "description": "Le API di Vegecoop possono essere utilizzate per integrare i tuoi dati in Vegecoop con qualsiasi sistema esterno. Crea un token per iniziare."
       },
       "webhooks": {
         "title": "Nessun webhook aggiunto",

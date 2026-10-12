@@ -7,7 +7,7 @@ from .api import APIActivityLog, APIToken
 from .asset import FileAsset
 from .base import BaseModel
 from .cycle import Cycle, CycleIssue, CycleUserProperties
-from .department import Department
+from .department import Department, DepartmentMember
 from .deploy_board import DeployBoard
 from .draft import (
     DraftIssue,

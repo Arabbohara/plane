@@ -41,6 +41,7 @@ from plane.db.models import (
 from plane.bgtasks.webhook_task import model_activity, webhook_activity
 from plane.utils.exception_logger import log_exception
 from .base import BaseAPIView
+from plane.utils.department_access import sync_project_department_access
 from plane.utils.host import base_host
 from plane.utils.order_queryset import PROJECT_ORDER_BY_ALLOWLIST, sanitize_order_by
 from plane.api.serializers import (
@@ -253,6 +254,9 @@ class ProjectListCreateAPIEndpoint(BaseAPIView):
                             member_id=serializer.instance.project_lead_id,
                             role=20,
                         )
+
+                    # Give members of the project's department access
+                    sync_project_department_access(serializer.instance)
 
                     State.objects.bulk_create(
                         [
@@ -555,6 +559,8 @@ class ProjectDetailAPIEndpoint(BaseAPIView):
             current_instance = json.dumps(ProjectSerializer(project).data, cls=DjangoJSONEncoder)
 
             intake_view = request.data.get("intake_view", project.intake_view)
+            previous_department_id = project.department_id
+            previous_network = project.network
 
             if project.archived_at:
                 return Response(
@@ -571,6 +577,7 @@ class ProjectDetailAPIEndpoint(BaseAPIView):
 
             if serializer.is_valid():
                 serializer.save()
+                sync_project_department_access(serializer.instance, previous_department_id, previous_network)
                 if serializer.data["intake_view"]:
                     intake = Intake.objects.filter(project=project, is_default=True).first()
                     if not intake:
