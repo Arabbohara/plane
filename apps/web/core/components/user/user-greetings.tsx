@@ -22,23 +22,30 @@ export function UserGreetingsView(props: IUserGreetingsView) {
   // store hooks
   const { t } = useTranslation();
 
+  // Use one timezone for every part of the greeting. "UTC" is the untouched profile default,
+  // so fall back to the browser's timezone until the user picks one in their profile.
+  const timeZone = user?.user_timezone && user.user_timezone !== "UTC" ? user.user_timezone : undefined;
+
   const hour = new Intl.DateTimeFormat("en-US", {
-    hour12: false,
+    timeZone,
+    hourCycle: "h23",
     hour: "numeric",
   }).format(currentTime);
 
   const date = new Intl.DateTimeFormat("en-US", {
+    timeZone,
     month: "short",
     day: "numeric",
   }).format(currentTime);
 
   const weekDay = new Intl.DateTimeFormat("en-US", {
+    timeZone,
     weekday: "long",
   }).format(currentTime);
 
   const timeString = new Intl.DateTimeFormat("en-US", {
-    timeZone: user?.user_timezone,
-    hour12: false, // Use 24-hour format
+    timeZone,
+    hourCycle: "h23", // Use 24-hour format
     hour: "2-digit",
     minute: "2-digit",
   }).format(currentTime);
